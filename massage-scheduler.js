@@ -46,7 +46,7 @@ casper.then(function(){
 // book the last available appointment
 casper.then(function(){
 	
-	this.echo('navigation to appointment page success, current url: ' + this.getCurrentUrl(), 'INFO');
+	// this.echo('navigation to appointment page success, current url: ' + this.getCurrentUrl(), 'INFO');
 
 	var lastAvailableAppointment,
 		bookedAppointments = document.getElementsByClassName('bluerow'),
