@@ -6,7 +6,7 @@ var casper = require('casper').create(),
 // email and password are passed in as options or as arguments, in that order
 casper.start('http://www.infinitemassage.com', function() {
 
-	this.echo('\nInitialized massage-scheduler at ' + new Date().toUTCString());
+	this.echo('\nInitialized massage-scheduler at ' + new Date().toLocaleString());
 
 	var email = casper.cli.args[0],
 		password = casper.cli.args[1];
