@@ -1,6 +1,23 @@
-var casper = require('casper').create(),
+var casper = require('casper').create({
+    	clientScripts: ['libs/jquery.min.js']
+	}),
 	colorizer = require('colorizer').create('Colorizer'),
 	usageInfo = 'Usage: `$ casperjs massage-scheduler.js some.example@email.com somePassword`';
+
+
+// DOM utilities
+function getBookedAppointmentDetails() {
+	var $row = $('.bluerow').parent('tr');
+	return $row.find('td:eq(0)').text() + '-' + $row.find('td:eq(1)').text();
+}
+
+function getMassageDate() {
+	return $('.page_header').siblings('table').find('tr:eq(0) td:eq(3)').text();
+}
+
+function getMasseuse() {
+	return $('.page_header').siblings('table').find('tr:eq(2) td:eq(1)').text();
+}
 
 // log in
 // email and password are passed in as options or as arguments, in that order
@@ -46,11 +63,15 @@ casper.then(function(){
 // book the first available appointment
 casper.then(function(){
 
+	this.echo('Checking appointments on ' + this.evaluate(getMassageDate) + ' with ' + this.evaluate(getMasseuse) + '...');
+
 	// this.echo('navigation to appointment page success, current url: ' + this.getCurrentUrl(), 'INFO');
 
 	if (this.exists('.bluerow')) {
 
-		this.echo('You already have an appointment booked.', 'WARNING');
+		var bookedAppointmentDetails = this.evaluate(getBookedAppointmentDetails);
+
+		this.echo('You already have an appointment booked.\nDetails: ' + bookedAppointmentDetails, 'INFO');
 
 		this.bypass(1);
 
@@ -72,7 +93,9 @@ casper.then(function(){
 // success confirmation
 casper.then(function(){
 
-	this.echo('Success!', 'GREEN_BAR')
+	this.echo('Success!\n' + 
+		'Booked appointment for ' + this.evaluate(getMassageDate) +
+		' ' + this.evaluate(getBookedAppointmentDetails) + ' with ' + this.evaluate(getMasseuse), 'GREEN_BAR');
 
 });
 
