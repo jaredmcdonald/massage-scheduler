@@ -36,42 +36,36 @@ casper.then(function(){
 	if (url === 'http://infinitemassage.com/schedule/login.php') {
 		this.die('Login failed: perhaps you provided incorrect login info?\n' + usageInfo);
 	}
-	
+
 	// this.echo('login success, current url: ' + url, 'INFO');
 
 	this.click('.table tr:last-child td a');
 
 });
 
-// book the last available appointment
+// book the first available appointment
 casper.then(function(){
-	
+
 	// this.echo('navigation to appointment page success, current url: ' + this.getCurrentUrl(), 'INFO');
 
-	var lastAvailableAppointment,
-		bookedAppointments = document.getElementsByClassName('bluerow'),
-		availableAppointments = document.getElementsByClassName('greenrow');
+	if (this.exists('.bluerow')) {
 
-	if (bookedAppointments.length) {
-
-		this.echo('You already have an appointment booked for ' + bookedAppointment.parentElement.children[0].textContent, 'INFO');
+		this.echo('You already have an appointment booked.', 'WARNING');
 
 		this.bypass(1);
 
-	} else if (!availableAppointments.length) {
-	
+	} else if (!this.exists('.greenrow')) {
+
 		this.echo('No available appointments.', 'WARNING');
 
 		this.bypass(1);
-	
+
 	} else {
 
-		lastAvailableAppointment = availableAppointments[availableAppointments.length - 1].parentElement;
+		this.echo('Booking appointment...', 'INFO');
 
-		this.echo('Booking appointment from ' + lastAvailableAppointment.children[0].textContent + ' to ' + lastAvailableAppointment.children[1].textContent + '...', 'INFO');
+		this.click('.greenrow~td a')
 
-		lastAvailableAppointment.children[lastAvailableAppointment.children.length - 1].children[0].click();
-	
 	}
 });
 
