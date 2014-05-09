@@ -5,7 +5,7 @@ var casper = require('casper').create({
 	usageInfo = 'Usage: `$ casperjs massage-scheduler.js some.example@email.com somePassword`';
 
 
-// DOM utilities
+// text-retrieval utilities
 function getBookedAppointmentDetails() {
 	var $row = $('.bluerow').parent('tr');
 	return $row.find('td:eq(0)').text() + '-' + $row.find('td:eq(1)').text();
@@ -36,8 +36,6 @@ casper.start('http://www.infinitemassage.com', function() {
 		this.die('Error: need to provide a password.\n' + usageInfo);
 	}
 
-	// this.echo('attempting to log in; current url: ' + this.getCurrentUrl(), 'INFO');
-
     this.fillSelectors('form', {
     	'input[name="email"]' : email,
     	'input[name="password"]' : password
@@ -54,8 +52,6 @@ casper.then(function(){
 		this.die('Login failed: perhaps you provided incorrect login info?\n' + usageInfo);
 	}
 
-	// this.echo('login success, current url: ' + url, 'INFO');
-
 	this.click('.table tr:last-child td a');
 
 });
@@ -64,8 +60,6 @@ casper.then(function(){
 casper.then(function(){
 
 	this.echo('Checking appointments on ' + this.evaluate(getMassageDate) + ' with ' + this.evaluate(getMasseuse) + '...');
-
-	// this.echo('navigation to appointment page success, current url: ' + this.getCurrentUrl(), 'INFO');
 
 	if (this.exists('.bluerow')) {
 
